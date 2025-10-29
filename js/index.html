@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Daftar Tugas Sederhana - Premium</title>
+    <link rel="stylesheet" href="../css/style.css"> 
+</head>
+<body>
+    
+    <div class="todo-app-container">
+        <div class="todo-app-card">
+            <h1>Daftar Tugas</h1>
+            
+            <div class="input-row">
+                <input type="text" id="task-input" placeholder="Tambahkan tugas baru...">
+                <input type="date" id="due-date-input"> 
+                <button id="add-btn" class="add-btn">+</button>
+            </div>
+            
+            <div class="controls-row">
+                <button id="filter-btn" class="control-btn filter-btn">Saring Tugas</button>
+                <button id="delete-all-btn" class="control-btn delete-all-btn">Hapus Semua</button>
+            </div>
+
+            <div class="task-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TUGAS</th>
+                            <th>TANGGAL</th>
+                            <th>STATUS</th>
+                            <th>TINDAKAN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-list">
+                        <tr><td colspan="4" class="no-task-message">No task found</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Hapus Semua Tugas?</h2>
+            <p>Apakah Anda yakin ingin menghapus SEMUA tugas dari daftar? Aksi ini tidak dapat dibatalkan.</p>
+            <div class="modal-actions">
+                <button id="cancel-delete-btn" class="control-btn filter-btn">Batal</button>
+                <button id="confirm-delete-btn" class="control-btn delete-all-btn">Ya, Hapus Semua</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> 
+</body>
+</html>

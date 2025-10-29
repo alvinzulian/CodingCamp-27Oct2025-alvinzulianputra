@@ -1,0 +1,303 @@
+/* Variabel Warna untuk konsistensi */
+:root {
+    --bg-color: #12121e;
+    --card-color: #242436;
+    --text-color: #e0e0ff;
+    --primary-color: #7f5af0;
+    --dark-control-color: #33334f;
+    --table-header-color: #44446b;
+}
+
+/* Gaya Dasar */
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.todo-app-card {
+    background-color: var(--card-color);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(127, 90, 240, 0.2);
+    width: 650px;
+    transition: transform 0.3s;
+}
+.todo-app-card:hover {
+    transform: translateY(-2px);
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px rgba(127, 90, 240, 0.5);
+}
+
+/* --- Input dan Tombol Tambah --- */
+.input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#task-input, #due-date-input {
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background-color: var(--dark-control-color);
+    color: var(--text-color);
+    flex-grow: 1;
+    transition: all 0.3s;
+}
+
+#due-date-input {
+    flex-grow: 0.5;
+    min-width: 150px;
+}
+
+#task-input:focus, #due-date-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(127, 90, 240, 0.6);
+    background-color: #2a2a40;
+}
+
+#task-input::placeholder, #due-date-input::placeholder {
+    color: #aaaaaa;
+}
+
+.add-btn {
+    background: linear-gradient(45deg, var(--primary-color), #9a7bff);
+    color: var(--text-color);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+.add-btn:hover {
+    background: linear-gradient(45deg, #9a7bff, #b39aff);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+/* --- Kontrol (Filter & Delete All) --- */
+.controls-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    color: var(--text-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.filter-btn {
+    background-color: var(--dark-control-color);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+.filter-btn:hover {
+    background-color: #44446b;
+    transform: translateY(-1px);
+}
+
+.delete-all-btn {
+    background: linear-gradient(45deg, var(--primary-color), #9a7bff);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+.delete-all-btn:hover {
+    background: linear-gradient(45deg, #9a7bff, #b39aff);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+
+/* --- Tabel Tugas dan Pesan Kosong --- */
+.task-table-container {
+    background-color: var(--dark-control-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+thead {
+    background-color: var(--table-header-color);
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+tbody tr {
+    transition: background-color 0.2s, box-shadow 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: #31314a;
+    box-shadow: 0 0 10px rgba(127, 90, 240, 0.2);
+}
+
+td {
+    padding: 10px 12px;
+    word-wrap: break-word; 
+}
+
+/* Gaya untuk tugas yang sudah selesai (Completed) */
+.completed-task {
+    text-decoration: line-through; 
+    opacity: 0.6; 
+    font-style: italic; 
+}
+
+td:last-child {
+    text-align: right;
+    width: 150px;
+    white-space: nowrap;
+}
+
+.no-task-message {
+    text-align: center;
+    padding: 30px 12px;
+    background-color: transparent !important;
+    color: #aaaaaa;
+    font-style: italic;
+}
+
+.action-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.85em;
+    margin-left: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    font-weight: 600;
+}
+
+.delete-btn {
+    border-color: #ff5a5a;
+    color: #ff5a5a;
+}
+
+.action-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    transform: scale(1.05);
+}
+
+.delete-btn:hover {
+    background-color: #ff5a5a;
+    color: var(--text-color);
+}
+
+/* --- Notifikasi Toast/Snackbar --- */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    font-weight: 600;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+/* --- Gaya Modal Konfirmasi --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden; 
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+}
+
+.modal-overlay.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--card-color);
+    color: var(--text-color);
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    color: #ff5a5a;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
