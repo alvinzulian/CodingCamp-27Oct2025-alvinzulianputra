@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tugas-tugas disimpan di sini
     let tasks = [];
     // Status filter saat ini
-    let currentFilter = 'ALL'; 
+    let currentFilter = 'ALL';
 
     // --- Fungsionalitas Toast Notification ---
     function showToast(message) {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 500); 
+            setTimeout(() => toast.remove(), 500);
         }, 3000);
     }
     // ------------------------------------------
@@ -56,6 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
     // ----------------------------------------------------
 
+    // --- Fungsionalitas Cek Overdue (BARU) ---
+    function isOverdue(task) {
+        // Tugas yang sudah selesai tidak bisa overdue
+        if (task.completed) return false;
+
+        // Normalisasi tanggal hari ini ke tengah malam untuk perbandingan hari yang akurat
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Buat objek Date dari string YYYY-MM-DD
+        const taskDueDate = new Date(task.dueDate);
+        
+        // Tugas dianggap Overdue jika tanggal jatuh tempo kurang dari hari ini
+        return taskDueDate < today;
+    }
+    // ------------------------------------------
+
 
     // Fungsi untuk menampilkan daftar tugas
     function renderTasks() {
@@ -63,8 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Logika FILTER
         const filteredTasks = tasks.filter(task => {
-            if (currentFilter === 'PENDING') return !task.completed;
+            if (currentFilter === 'PENDING') return !task.completed && !isOverdue(task);
             if (currentFilter === 'COMPLETED') return task.completed;
+            if (currentFilter === 'OVERDUE') return isOverdue(task); // Filter Overdue
             return true; // 'ALL'
         });
 
@@ -75,9 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 message = "No pending task found";
             } else if (currentFilter === 'COMPLETED') {
                 message = "No completed task found";
+            } else if (currentFilter === 'OVERDUE') {
+                message = "No overdue task found";
             }
             const noTaskRow = document.createElement('tr');
-            noTaskRow.innerHTML = `<td colspan="4" class="no-task-message">${message}</td>`; 
+            noTaskRow.innerHTML = `<td colspan="4" class="no-task-message">${message}</td>`;
             taskList.appendChild(noTaskRow);
             return;
         }
@@ -85,8 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Menampilkan Daftar Tugas (hasil filter)
         filteredTasks.forEach((task) => {
             
-            const statusText = task.completed ? 'Completed' : 'Pending';
-            const taskClass = task.completed ? 'completed-task' : ''; 
+            // Logika Status Tugas (diperbarui)
+            const overdue = isOverdue(task);
+            let statusText;
+            let taskClass = '';
+
+            if (task.completed) {
+                statusText = 'Completed';
+                taskClass = 'completed-task';
+            } else if (overdue) {
+                statusText = 'Overdue';
+                taskClass = 'overdue-task'; // Kelas CSS baru
+            } else {
+                statusText = 'Pending';
+                taskClass = '';
+            }
 
             const completeButtonText = task.completed ? 'Undo' : 'Complete';
             
@@ -120,6 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast("⚠️ Nama tugas tidak boleh kosong!");
             return;
         }
+        
+        // Validasi Tanggal Jatuh Tempo (TAMBAHAN)
+        if (dueDate === "") {
+            showToast("⚠️ Tanggal batas waktu tidak boleh kosong!");
+            return;
+        }
 
         const newTask = {
             id: Date.now().toString(),
@@ -138,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
-    // --- Fungsionalitas FILTER ---
+    // --- Fungsionalitas FILTER (diperbarui untuk Overdue) ---
     function toggleFilter() {
         if (currentFilter === 'ALL') {
             currentFilter = 'PENDING';
@@ -146,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (currentFilter === 'PENDING') {
             currentFilter = 'COMPLETED';
             filterBtn.textContent = 'FILTER (Completed)';
+        } else if (currentFilter === 'COMPLETED') { 
+            currentFilter = 'OVERDUE';
+            filterBtn.textContent = 'FILTER (Overdue)'; // Status filter Overdue
         } else {
             currentFilter = 'ALL';
             filterBtn.textContent = 'FILTER';
@@ -155,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Fungsionalitas HAPUS SEMUA (MODAL HANDLER) ---
     function showDeleteModal() {
-        if (tasks.length === 0) return; 
+        if (tasks.length === 0) return;
         deleteModal.classList.add('visible');
     }
 
@@ -184,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filterBtn.addEventListener('click', toggleFilter);
 
     // Menampilkan modal saat tombol Hapus Semua diklik
-    deleteAllBtn.addEventListener('click', showDeleteModal); 
+    deleteAllBtn.addEventListener('click', showDeleteModal);
     
     // Event listener untuk tombol di modal
     cancelDeleteBtn.addEventListener('click', hideDeleteModal);
@@ -194,11 +236,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Delegasi Event untuk tombol Complete/Delete di dalam tabel
     taskList.addEventListener('click', (e) => {
         const target = e.target;
-        if (target.classList.contains('action-btn')) { 
-            const taskId = target.getAttribute('data-id'); 
-            const taskIndex = tasks.findIndex(t => t.id === taskId); 
+        if (target.classList.contains('action-btn')) {
+            const taskId = target.getAttribute('data-id');
+            const taskIndex = tasks.findIndex(t => t.id === taskId);
 
-            if (taskIndex === -1) return; 
+            if (taskIndex === -1) return;
 
             if (target.classList.contains('complete-btn')) {
                 tasks[taskIndex].completed = !tasks[taskIndex].completed;
